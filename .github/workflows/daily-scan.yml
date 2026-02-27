@@ -30,7 +30,12 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run breakout scanner
-        run: python src/main.py
+        run: |
+          if [ ! -f data/tickers.csv ]; then
+            python src/main.py --update-tickers
+          else
+            python src/main.py
+          fi
         continue-on-error: true
 
       - name: Commit and push results
