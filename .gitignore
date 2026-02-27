@@ -12,6 +12,9 @@ build/
 # Environment
 .env
 
+# Claude Code
+.claude/
+
 # 大きいファイル (実行時に再取得される)
 data/data_j.xls
 data/price_cache.csv
