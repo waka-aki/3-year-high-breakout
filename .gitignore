@@ -14,6 +14,7 @@ build/
 
 # Claude Code
 .claude/
+CLAUDE.md
 
 # 大きいファイル (実行時に再取得される)
 data/data_j.xls
