@@ -1,0 +1,6 @@
+yfinance
+pandas
+Jinja2
+xlrd
+openpyxl
+requests

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>52-Week High Breakout Screener</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f7f8fa; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+  th { background: #1e293b; color: #fff; cursor: pointer; user-select: none; position: sticky; top: 0; }
+  th:hover { background: #334155; }
+  td:first-child, th:first-child { text-align: left; }
+  td:nth-child(2), th:nth-child(2) { text-align: left; }
+  tr:hover { background: #f1f5f9; }
+  .positive { color: #16a34a; }
+  .negative { color: #dc2626; }
+  .star { color: #f59e0b; font-size: 16px; }
+  .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 24px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+  .stat-box { background: #f8fafc; border-radius: 8px; padding: 16px; text-align: center; }
+  .stat-value { font-size: 28px; font-weight: 700; color: #1e293b; }
+  .stat-label { font-size: 13px; color: #64748b; margin-top: 4px; }
+  .sort-arrow::after { content: ' ⇅'; font-size: 10px; opacity: 0.5; }
+  .sort-asc::after { content: ' ▲'; opacity: 1; }
+  .sort-desc::after { content: ' ▼'; opacity: 1; }
+  .section-title { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; }
+  .header { background: linear-gradient(135deg, #1e293b, #334155); color: #fff; padding: 32px; border-radius: 8px; margin-bottom: 24px; }
+  .header h1 { font-size: 28px; font-weight: 700; }
+  .header p { color: #94a3b8; margin-top: 8px; }
+  .overflow-x { overflow-x: auto; }
+  .na { color: #94a3b8; }
+</style>
+</head>
+<body class="p-4 md:p-8 max-w-7xl mx-auto">
+
+<div class="header">
+  <h1>52-Week High Breakout Screener</h1>
+  <p>Updated: {{ update_time }} | Tickers screened: {{ total_tickers }} | Breakouts today: {{ breakout_count }}</p>
+</div>
+
+<!-- Summary Statistics -->
+<div class="card">
+  <div class="section-title">Summary</div>
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-value">{{ breakout_count }}</div>
+      <div class="stat-label">Breakouts Today</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">{{ prime_count }}</div>
+      <div class="stat-label">Prime</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">{{ standard_count }}</div>
+      <div class="stat-label">Standard</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">{{ growth_count }}</div>
+      <div class="stat-label">Growth</div>
+    </div>
+    {% if avg_return_5d is not none %}
+    <div class="stat-box">
+      <div class="stat-value {% if avg_return_5d >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(avg_return_5d) }}%</div>
+      <div class="stat-label">Avg 5d Return</div>
+    </div>
+    {% endif %}
+    {% if avg_return_30d is not none %}
+    <div class="stat-box">
+      <div class="stat-value {% if avg_return_30d >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(avg_return_30d) }}%</div>
+      <div class="stat-label">Avg 30d Return</div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Today's Breakouts -->
+<div class="card">
+  <div class="section-title">Today's Breakouts</div>
+  {% if breakouts|length > 0 %}
+  <div class="overflow-x">
+    <table id="breakout-table">
+      <thead>
+        <tr>
+          <th class="sort-arrow" data-col="0" data-type="str">Ticker</th>
+          <th class="sort-arrow" data-col="1" data-type="str">Name</th>
+          <th class="sort-arrow" data-col="2" data-type="str">Market</th>
+          <th class="sort-arrow" data-col="3" data-type="num">Close</th>
+          <th class="sort-arrow" data-col="4" data-type="num">52W High</th>
+          <th class="sort-arrow" data-col="5" data-type="num">Breakout %</th>
+          <th class="sort-arrow" data-col="6" data-type="num">Value Change</th>
+          <th class="sort-arrow" data-col="7" data-type="num">Vol-Adj Ratio</th>
+          <th class="sort-arrow" data-col="8" data-type="num">Vol Days</th>
+          <th class="sort-arrow" data-col="9" data-type="num">Rev Growth</th>
+          <th class="sort-arrow" data-col="10" data-type="num">Op Margin</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in breakouts %}
+        <tr>
+          <td>{{ b.ticker }}</td>
+          <td>{{ b.name }}</td>
+          <td>{{ b.market }}</td>
+          <td>{{ "%.0f"|format(b.close) }}</td>
+          <td>{{ "%.0f"|format(b.high_52w) }}</td>
+          <td class="positive">+{{ "%.2f"|format(b.breakout_pct) }}%</td>
+          <td>{{ "%.1f"|format(b.trading_value_change) if b.trading_value_change == b.trading_value_change else '<span class="na">N/A</span>' }}x</td>
+          <td>{{ "%.1f"|format(b.vol_adj_volume_ratio) if b.vol_adj_volume_ratio == b.vol_adj_volume_ratio else '<span class="na">N/A</span>' }}</td>
+          <td>{{ b.consec_volume_days }} <span class="star">{{ b.volume_star }}</span></td>
+          <td>{% if b.revenue_growth_yoy == b.revenue_growth_yoy %}<span class="{% if b.revenue_growth_yoy >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(b.revenue_growth_yoy) }}%</span>{% else %}<span class="na">N/A</span>{% endif %}</td>
+          <td>{% if b.operating_margin == b.operating_margin %}{{ "%.1f"|format(b.operating_margin) }}%{% else %}<span class="na">N/A</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p style="color: #64748b;">No breakouts detected today.</p>
+  {% endif %}
+</div>
+
+<!-- Performance Tracking -->
+<div class="card">
+  <div class="section-title">Post-Breakout Performance (Last 30 Days)</div>
+  {% if performance|length > 0 %}
+  <div class="overflow-x">
+    <table id="perf-table">
+      <thead>
+        <tr>
+          <th class="sort-arrow" data-col="0" data-type="str">Ticker</th>
+          <th class="sort-arrow" data-col="1" data-type="str">Name</th>
+          <th class="sort-arrow" data-col="2" data-type="str">Date</th>
+          <th class="sort-arrow" data-col="3" data-type="num">Breakout Price</th>
+          <th class="sort-arrow" data-col="4" data-type="num">Current</th>
+          <th class="sort-arrow" data-col="5" data-type="num">Return</th>
+          <th class="sort-arrow" data-col="6" data-type="num">5d</th>
+          <th class="sort-arrow" data-col="7" data-type="num">30d</th>
+          <th class="sort-arrow" data-col="8" data-type="num">60d</th>
+          <th class="sort-arrow" data-col="9" data-type="num">90d</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in performance %}
+        <tr>
+          <td>{{ p.ticker }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.breakout_date }}</td>
+          <td>{{ "%.0f"|format(p.breakout_price) }}</td>
+          <td>{{ "%.0f"|format(p.current_price) if p.current_price == p.current_price else '<span class="na">N/A</span>' }}</td>
+          <td class="{% if p.current_return is defined and p.current_return == p.current_return %}{% if p.current_return >= 0 %}positive{% else %}negative{% endif %}{% endif %}">
+            {% if p.current_return is defined and p.current_return == p.current_return %}{{ "%+.2f"|format(p.current_return) }}%{% else %}<span class="na">N/A</span>{% endif %}
+          </td>
+          {% for d in [5, 30, 60, 90] %}
+          {% set ret = p['return_' ~ d ~ 'd'] %}
+          <td class="{% if ret == ret %}{% if ret >= 0 %}positive{% else %}negative{% endif %}{% endif %}">
+            {% if ret == ret %}{{ "%+.2f"|format(ret) }}%{% else %}<span class="na">-</span>{% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p style="color: #64748b;">No performance data available yet.</p>
+  {% endif %}
+</div>
+
+<script>
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', function() {
+    const table = this.closest('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const col = parseInt(this.dataset.col);
+    const type = this.dataset.type;
+
+    // Toggle sort direction
+    const isAsc = this.classList.contains('sort-asc');
+    table.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+    this.classList.add(isAsc ? 'sort-desc' : 'sort-asc');
+    const dir = isAsc ? -1 : 1;
+
+    rows.sort((a, b) => {
+      let va = a.cells[col].textContent.trim();
+      let vb = b.cells[col].textContent.trim();
+      if (type === 'num') {
+        va = parseFloat(va.replace(/[^0-9.\-]/g, '')) || 0;
+        vb = parseFloat(vb.replace(/[^0-9.\-]/g, '')) || 0;
+        return (va - vb) * dir;
+      }
+      return va.localeCompare(vb, 'ja') * dir;
+    });
+
+    rows.forEach(row => tbody.appendChild(row));
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+2026-02-27 13:32:18,038 [INFO] __main__: === 52-Week High Breakout Screener ===
+2026-02-27 13:32:18,038 [INFO] __main__: Step 1: Loading cached ticker list...
+2026-02-27 13:32:18,056 [INFO] ticker_manager: Loaded 3771 tickers from cache
+2026-02-27 13:32:18,061 [INFO] __main__: Working with 3771 tickers
+2026-02-27 13:32:18,061 [INFO] __main__: Step 2: Fetching price data...
+2026-02-27 13:32:19,449 [INFO] data_fetcher: Loaded price cache: 975480 rows
+2026-02-27 13:32:19,647 [INFO] data_fetcher: Fetching prices for 3 tickers
+2026-02-27 13:32:19,648 [INFO] data_fetcher: Batch 1-2/2 (start=2026-02-26)
+2026-02-27 13:32:20,479 [ERROR] yfinance: $5596.T: possibly delisted; no price data found  (1d 2026-02-26 -> 2026-02-28)
+2026-02-27 13:32:20,570 [ERROR] yfinance: 
+1 Failed download:
+2026-02-27 13:32:20,571 [ERROR] yfinance: ['5596.T']: possibly delisted; no price data found  (1d 2026-02-26 -> 2026-02-28)
+2026-02-27 13:32:20,606 [INFO] data_fetcher: Batch 1-1/1 (start=2026-02-05)
+2026-02-27 13:32:28,840 [INFO] data_fetcher: Saved price cache: 975480 rows
+2026-02-27 13:32:28,842 [INFO] __main__: Step 3: Detecting breakouts...
+2026-02-27 13:32:28,848 [INFO] __main__: Loaded 229 prior breakout records for cooldown filter
+2026-02-27 13:32:28,854 [INFO] breakout_detector: Detecting breakouts as of 2026-02-27
+2026-02-27 13:32:28,863 [INFO] breakout_detector: Cooldown: 229 tickers had breakouts in last 30 days, skipping
+2026-02-27 13:32:33,732 [INFO] breakout_detector: No breakouts detected
+2026-02-27 13:32:33,734 [INFO] __main__: Step 4: Scoring breakouts...
+2026-02-27 13:32:33,735 [INFO] __main__: Step 5: No breakouts to fetch financials for
+2026-02-27 13:32:33,735 [INFO] __main__: Step 6: Updating performance tracking...
+2026-02-27 13:34:22,792 [INFO] performance_tracker: Tracked performance for 229 breakouts
+2026-02-27 13:34:22,793 [INFO] __main__: Step 7: Rendering dashboard...
+2026-02-27 13:34:22,874 [INFO] renderer: Dashboard written to /home/awaka/stock/52-week_high_breakout/src/../output/dashboard.html
+2026-02-27 13:34:22,875 [INFO] __main__: === Done! Dashboard: /home/awaka/stock/52-week_high_breakout/src/../output/dashboard.html ===
