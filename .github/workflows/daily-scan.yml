@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/*.csv output/dashboard.html logs/
+          git add data/tickers.csv data/breakout_history.csv data/performance_tracking.csv output/dashboard.html logs/ || true
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
