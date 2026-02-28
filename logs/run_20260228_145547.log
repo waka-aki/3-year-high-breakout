@@ -1,0 +1,97 @@
+2026-02-28 14:55:47,516 [INFO] __main__: === 52-Week High Breakout Screener ===
+2026-02-28 14:55:47,517 [INFO] __main__: Step 1: Loading cached ticker list...
+2026-02-28 14:55:47,523 [INFO] ticker_manager: Loaded 3771 tickers from cache
+2026-02-28 14:55:47,523 [INFO] __main__: Working with 3771 tickers
+2026-02-28 14:55:47,523 [INFO] __main__: Step 2: Fetching price data...
+2026-02-28 14:55:47,538 [INFO] data_fetcher: Fetching prices for 3771 tickers
+2026-02-28 14:55:47,538 [INFO] data_fetcher: Batch 1-50/3771 (start=2025-02-03)
+2026-02-28 14:55:47,540 [INFO] yfinance: Failed to create TzCache, reason: Error creating TzCache folder: '/home/runner/.cache/py-yfinance' reason: [Errno 17] File exists: '/home/runner/.cache/py-yfinance'. TzCache will not be used. Tip: You can direct cache to use a different location with 'set_tz_cache_location(mylocation)'
+2026-02-28 14:55:53,944 [INFO] data_fetcher: Batch 51-100/3771 (start=2025-02-03)
+2026-02-28 14:56:00,731 [INFO] data_fetcher: Batch 101-150/3771 (start=2025-02-03)
+2026-02-28 14:56:09,959 [INFO] data_fetcher: Batch 151-200/3771 (start=2025-02-03)
+2026-02-28 14:56:19,625 [INFO] data_fetcher: Batch 201-250/3771 (start=2025-02-03)
+2026-02-28 14:56:27,575 [INFO] data_fetcher: Batch 251-300/3771 (start=2025-02-03)
+2026-02-28 14:56:37,031 [INFO] data_fetcher: Batch 301-350/3771 (start=2025-02-03)
+2026-02-28 14:56:46,430 [INFO] data_fetcher: Batch 351-400/3771 (start=2025-02-03)
+2026-02-28 14:56:54,990 [INFO] data_fetcher: Batch 401-450/3771 (start=2025-02-03)
+2026-02-28 14:57:04,828 [INFO] data_fetcher: Batch 451-500/3771 (start=2025-02-03)
+2026-02-28 14:57:13,146 [INFO] data_fetcher: Batch 501-550/3771 (start=2025-02-03)
+2026-02-28 14:57:22,897 [INFO] data_fetcher: Batch 551-600/3771 (start=2025-02-03)
+2026-02-28 14:57:30,947 [INFO] data_fetcher: Batch 601-650/3771 (start=2025-02-03)
+2026-02-28 14:57:40,675 [INFO] data_fetcher: Batch 651-700/3771 (start=2025-02-03)
+2026-02-28 14:57:48,286 [INFO] data_fetcher: Batch 701-750/3771 (start=2025-02-03)
+2026-02-28 14:57:56,952 [INFO] data_fetcher: Batch 751-800/3771 (start=2025-02-03)
+2026-02-28 14:58:04,510 [INFO] data_fetcher: Batch 801-850/3771 (start=2025-02-03)
+2026-02-28 14:58:12,792 [INFO] data_fetcher: Batch 851-900/3771 (start=2025-02-03)
+2026-02-28 14:58:26,795 [INFO] data_fetcher: Batch 901-950/3771 (start=2025-02-03)
+2026-02-28 14:58:35,237 [INFO] data_fetcher: Batch 951-1000/3771 (start=2025-02-03)
+2026-02-28 14:58:43,525 [INFO] data_fetcher: Batch 1001-1050/3771 (start=2025-02-03)
+2026-02-28 14:58:53,021 [INFO] data_fetcher: Batch 1051-1100/3771 (start=2025-02-03)
+2026-02-28 14:59:01,247 [INFO] data_fetcher: Batch 1101-1150/3771 (start=2025-02-03)
+2026-02-28 14:59:10,770 [INFO] data_fetcher: Batch 1151-1200/3771 (start=2025-02-03)
+2026-02-28 14:59:22,426 [INFO] data_fetcher: Batch 1201-1250/3771 (start=2025-02-03)
+2026-02-28 14:59:30,651 [INFO] data_fetcher: Batch 1251-1300/3771 (start=2025-02-03)
+2026-02-28 14:59:38,859 [INFO] data_fetcher: Batch 1301-1350/3771 (start=2025-02-03)
+2026-02-28 14:59:46,741 [INFO] data_fetcher: Batch 1351-1400/3771 (start=2025-02-03)
+2026-02-28 14:59:55,000 [INFO] data_fetcher: Batch 1401-1450/3771 (start=2025-02-03)
+2026-02-28 15:00:04,763 [INFO] data_fetcher: Batch 1451-1500/3771 (start=2025-02-03)
+2026-02-28 15:00:13,301 [INFO] data_fetcher: Batch 1501-1550/3771 (start=2025-02-03)
+2026-02-28 15:00:22,930 [INFO] data_fetcher: Batch 1551-1600/3771 (start=2025-02-03)
+2026-02-28 15:00:31,303 [INFO] data_fetcher: Batch 1601-1650/3771 (start=2025-02-03)
+2026-02-28 15:00:41,133 [INFO] data_fetcher: Batch 1651-1700/3771 (start=2025-02-03)
+2026-02-28 15:00:48,567 [INFO] data_fetcher: Batch 1701-1750/3771 (start=2025-02-03)
+2026-02-28 15:00:59,639 [INFO] data_fetcher: Batch 1751-1800/3771 (start=2025-02-03)
+2026-02-28 15:01:09,393 [INFO] data_fetcher: Batch 1801-1850/3771 (start=2025-02-03)
+2026-02-28 15:01:18,928 [INFO] data_fetcher: Batch 1851-1900/3771 (start=2025-02-03)
+2026-02-28 15:01:27,029 [INFO] data_fetcher: Batch 1901-1950/3771 (start=2025-02-03)
+2026-02-28 15:01:36,079 [INFO] data_fetcher: Batch 1951-2000/3771 (start=2025-02-03)
+2026-02-28 15:01:44,602 [INFO] data_fetcher: Batch 2001-2050/3771 (start=2025-02-03)
+2026-02-28 15:01:53,311 [INFO] data_fetcher: Batch 2051-2100/3771 (start=2025-02-03)
+2026-02-28 15:02:01,432 [INFO] data_fetcher: Batch 2101-2150/3771 (start=2025-02-03)
+2026-02-28 15:02:12,359 [INFO] data_fetcher: Batch 2151-2200/3771 (start=2025-02-03)
+2026-02-28 15:02:21,800 [INFO] data_fetcher: Batch 2201-2250/3771 (start=2025-02-03)
+2026-02-28 15:02:29,926 [INFO] data_fetcher: Batch 2251-2300/3771 (start=2025-02-03)
+2026-02-28 15:02:38,784 [INFO] data_fetcher: Batch 2301-2350/3771 (start=2025-02-03)
+2026-02-28 15:02:46,879 [INFO] data_fetcher: Batch 2351-2400/3771 (start=2025-02-03)
+2026-02-28 15:02:56,023 [INFO] data_fetcher: Batch 2401-2450/3771 (start=2025-02-03)
+2026-02-28 15:03:05,773 [INFO] data_fetcher: Batch 2451-2500/3771 (start=2025-02-03)
+2026-02-28 15:03:17,465 [INFO] data_fetcher: Batch 2501-2550/3771 (start=2025-02-03)
+2026-02-28 15:03:25,230 [INFO] data_fetcher: Batch 2551-2600/3771 (start=2025-02-03)
+2026-02-28 15:03:33,298 [INFO] data_fetcher: Batch 2601-2650/3771 (start=2025-02-03)
+2026-02-28 15:03:45,453 [INFO] data_fetcher: Batch 2651-2700/3771 (start=2025-02-03)
+2026-02-28 15:03:54,829 [INFO] data_fetcher: Batch 2701-2750/3771 (start=2025-02-03)
+2026-02-28 15:04:04,599 [INFO] data_fetcher: Batch 2751-2800/3771 (start=2025-02-03)
+2026-02-28 15:04:14,978 [INFO] data_fetcher: Batch 2801-2850/3771 (start=2025-02-03)
+2026-02-28 15:04:23,308 [INFO] data_fetcher: Batch 2851-2900/3771 (start=2025-02-03)
+2026-02-28 15:04:31,394 [INFO] data_fetcher: Batch 2901-2950/3771 (start=2025-02-03)
+2026-02-28 15:04:44,221 [INFO] data_fetcher: Batch 2951-3000/3771 (start=2025-02-03)
+2026-02-28 15:04:51,999 [INFO] data_fetcher: Batch 3001-3050/3771 (start=2025-02-03)
+2026-02-28 15:05:01,009 [INFO] data_fetcher: Batch 3051-3100/3771 (start=2025-02-03)
+2026-02-28 15:05:10,015 [INFO] data_fetcher: Batch 3101-3150/3771 (start=2025-02-03)
+2026-02-28 15:05:20,888 [INFO] data_fetcher: Batch 3151-3200/3771 (start=2025-02-03)
+2026-02-28 15:05:28,682 [INFO] data_fetcher: Batch 3201-3250/3771 (start=2025-02-03)
+2026-02-28 15:05:39,532 [INFO] data_fetcher: Batch 3251-3300/3771 (start=2025-02-03)
+2026-02-28 15:05:47,745 [INFO] data_fetcher: Batch 3301-3350/3771 (start=2025-02-03)
+2026-02-28 15:05:57,770 [INFO] data_fetcher: Batch 3351-3400/3771 (start=2025-02-03)
+2026-02-28 15:06:07,506 [INFO] data_fetcher: Batch 3401-3450/3771 (start=2025-02-03)
+2026-02-28 15:06:14,553 [INFO] data_fetcher: Batch 3451-3500/3771 (start=2025-02-03)
+2026-02-28 15:06:24,132 [INFO] data_fetcher: Batch 3501-3550/3771 (start=2025-02-03)
+2026-02-28 15:06:35,176 [INFO] data_fetcher: Batch 3551-3600/3771 (start=2025-02-03)
+2026-02-28 15:06:43,413 [INFO] data_fetcher: Batch 3601-3650/3771 (start=2025-02-03)
+2026-02-28 15:06:53,009 [INFO] data_fetcher: Batch 3651-3700/3771 (start=2025-02-03)
+2026-02-28 15:07:01,821 [INFO] data_fetcher: Batch 3701-3750/3771 (start=2025-02-03)
+2026-02-28 15:07:10,607 [INFO] data_fetcher: Batch 3751-3771/3771 (start=2025-02-03)
+2026-02-28 15:07:21,716 [INFO] data_fetcher: Saved price cache: 971811 rows
+2026-02-28 15:07:21,798 [INFO] __main__: Step 3: Detecting breakouts...
+2026-02-28 15:07:21,937 [INFO] breakout_detector: Detecting breakouts as of 2026-02-27
+2026-02-28 15:07:25,536 [INFO] breakout_detector: Detected 384 breakouts
+2026-02-28 15:07:25,536 [INFO] __main__: Step 4: Applying volume/liquidity filter...
+2026-02-28 15:08:28,524 [INFO] volume_filter: Volume filter: 243 / 384 breakouts passed
+2026-02-28 15:08:28,524 [INFO] __main__: Step 5: Fetching financials for 243 breakout stocks...
+2026-02-28 15:09:12,466 [INFO] financials: Fetched financials for 243 stocks
+2026-02-28 15:09:12,466 [INFO] __main__: Step 6: Updating performance tracking...
+2026-02-28 15:09:12,469 [INFO] performance_tracker: Added 243 new breakouts to history (total: 243)
+2026-02-28 15:10:11,572 [INFO] performance_tracker: Tracked performance for 243 breakouts
+2026-02-28 15:10:11,572 [INFO] __main__: Step 7: Rendering dashboard...
+2026-02-28 15:10:11,601 [INFO] renderer: Dashboard written to /home/runner/work/52-week-high-breakout/52-week-high-breakout/src/../output/dashboard.html
+2026-02-28 15:10:11,601 [INFO] __main__: === Done! Dashboard: /home/runner/work/52-week-high-breakout/52-week-high-breakout/src/../output/dashboard.html ===
