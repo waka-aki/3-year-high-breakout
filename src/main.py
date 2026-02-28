@@ -14,7 +14,7 @@ import pandas as pd
 from ticker_manager import load_tickers, update_tickers
 from data_fetcher import fetch_prices
 from breakout_detector import detect_breakouts
-from volume_filter import filter_by_volume
+from scoring import score_breakouts
 from financials import fetch_financials
 from performance_tracker import update_history, track_performance
 from renderer import render_dashboard
@@ -75,9 +75,9 @@ def main():
         logger.info("Loaded %d prior breakout records for cooldown filter", len(prior_history))
     breakouts = detect_breakouts(prices, tickers_df, history=prior_history)
 
-    # 4. Filter by volume / liquidity
-    logger.info("Step 4: Filtering breakouts by volume/liquidity...")
-    breakouts = filter_by_volume(breakouts, prices)
+    # 4. Score breakout stocks
+    logger.info("Step 4: Scoring breakouts...")
+    breakouts = score_breakouts(breakouts, prices)
 
     # 5. Fetch financials for breakout stocks only
     if not breakouts.empty:
