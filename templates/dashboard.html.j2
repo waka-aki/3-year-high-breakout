@@ -89,9 +89,9 @@
           <th class="sort-arrow" data-col="3" data-type="num">Close</th>
           <th class="sort-arrow" data-col="4" data-type="num">52W High</th>
           <th class="sort-arrow" data-col="5" data-type="num">Breakout %</th>
-          <th class="sort-arrow" data-col="6" data-type="num">Value Change</th>
-          <th class="sort-arrow" data-col="7" data-type="num">Vol-Adj Ratio</th>
-          <th class="sort-arrow" data-col="8" data-type="num">Vol Days</th>
+          <th class="sort-arrow" data-col="6" data-type="num">出来高倍率</th>
+          <th class="sort-arrow" data-col="7" data-type="num">売買代金（億）</th>
+          <th class="sort-arrow" data-col="8" data-type="num">時価総額（億）</th>
           <th class="sort-arrow" data-col="9" data-type="num">Rev Growth</th>
           <th class="sort-arrow" data-col="10" data-type="num">Op Margin</th>
         </tr>
@@ -105,9 +105,9 @@
           <td>{{ "%.0f"|format(b.close) }}</td>
           <td>{{ "%.0f"|format(b.high_52w) }}</td>
           <td class="positive">+{{ "%.2f"|format(b.breakout_pct) }}%</td>
-          <td>{{ "%.1f"|format(b.trading_value_change) if b.trading_value_change == b.trading_value_change else '<span class="na">N/A</span>' }}x</td>
-          <td>{{ "%.1f"|format(b.vol_adj_volume_ratio) if b.vol_adj_volume_ratio == b.vol_adj_volume_ratio else '<span class="na">N/A</span>' }}</td>
-          <td>{{ b.consec_volume_days }} <span class="star">{{ b.volume_star }}</span></td>
+          <td>{{ "%.1f"|format(b.volume_ratio) if b.volume_ratio == b.volume_ratio else '<span class="na">N/A</span>' }}x</td>
+          <td>{{ "%.1f"|format(b.trading_value) }}</td>
+          <td>{{ "%.0f"|format(b.market_cap) }}</td>
           <td>{% if b.revenue_growth_yoy == b.revenue_growth_yoy %}<span class="{% if b.revenue_growth_yoy >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(b.revenue_growth_yoy) }}%</span>{% else %}<span class="na">N/A</span>{% endif %}</td>
           <td>{% if b.operating_margin == b.operating_margin %}{{ "%.1f"|format(b.operating_margin) }}%{% else %}<span class="na">N/A</span>{% endif %}</td>
         </tr>
