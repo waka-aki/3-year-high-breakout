@@ -16,6 +16,9 @@ build/
 .claude/
 CLAUDE.md
 
+# ログ (実行時に自動生成される)
+logs/
+
 # 大きいファイル (実行時に再取得される)
 data/data_j.xls
 data/price_cache.csv
