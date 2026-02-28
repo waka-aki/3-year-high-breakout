@@ -6,7 +6,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-COOLDOWN_DAYS = 90
+COOLDOWN_DAYS = 60
 
 
 def detect_breakouts(

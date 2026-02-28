@@ -9,7 +9,7 @@ import yfinance as yf
 logger = logging.getLogger(__name__)
 
 # Filter thresholds
-MIN_TRADING_VALUE = 2e8       # 2億円
+MIN_TRADING_VALUE = 1e8       # 1億円
 MIN_MARKET_CAP = 1e10         # 100億円
 
 
@@ -42,7 +42,7 @@ def filter_by_volume(breakouts: pd.DataFrame, prices: pd.DataFrame) -> pd.DataFr
         # Condition A: trading value >= 2億円
         today_trading_value = latest["close"] * latest["volume"]
         if today_trading_value < MIN_TRADING_VALUE:
-            logger.debug("%s: trading value %.0f < 2億, skipped", ticker, today_trading_value)
+            logger.debug("%s: trading value %.0f < 1億, skipped", ticker, today_trading_value)
             continue
 
         # Condition B: market cap >= 100億円
