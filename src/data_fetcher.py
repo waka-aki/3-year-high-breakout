@@ -15,7 +15,7 @@ PRICE_CACHE = os.path.join(DATA_DIR, "price_cache.csv")
 
 BATCH_SIZE = 50
 BATCH_SLEEP = 2  # seconds between batches
-LOOKBACK_MONTHS = 13
+LOOKBACK_MONTHS = 37  # ~3 years of price history
 
 
 def _cutoff_date() -> pd.Timestamp:

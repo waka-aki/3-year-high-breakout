@@ -37,7 +37,7 @@ def setup_logging():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="52-Week High Breakout Screener")
+    parser = argparse.ArgumentParser(description="3-Year High Breakout Screener")
     parser.add_argument(
         "--update-tickers",
         action="store_true",
@@ -47,7 +47,7 @@ def main():
 
     setup_logging()
     logger = logging.getLogger(__name__)
-    logger.info("=== 52-Week High Breakout Screener ===")
+    logger.info("=== 3-Year High Breakout Screener ===")
 
     # 1. Ticker list
     if args.update_tickers:
@@ -72,7 +72,7 @@ def main():
     prior_history = pd.DataFrame()
     if os.path.exists(history_path):
         prior_history = pd.read_csv(history_path)
-        logger.info("Loaded %d prior breakout records for cooldown filter", len(prior_history))
+        logger.info("Loaded %d prior breakout records", len(prior_history))
     breakouts = detect_breakouts(prices, tickers_df, history=prior_history)
 
     # 4. Volume/liquidity filter
