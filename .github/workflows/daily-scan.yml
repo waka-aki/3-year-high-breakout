@@ -1,4 +1,4 @@
-name: Daily 52-Week High Breakout Scan
+name: Daily 3-Year High Breakout Scan
 
 on:
   schedule:
@@ -13,7 +13,7 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 180
 
     steps:
       - name: Checkout repository
@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Restore price cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/price_cache.csv
+          key: price-cache
+
       - name: Run breakout scanner
         run: |
           if [ ! -f data/tickers.csv ]; then
@@ -37,6 +43,12 @@ jobs:
             python src/main.py
           fi
         continue-on-error: true
+
+      - name: Save price cache
+        uses: actions/cache/save@v4
+        with:
+          path: data/price_cache.csv
+          key: price-cache
 
       - name: Commit and push results
         run: |

@@ -42,6 +42,7 @@ def _fetch_batch(tickers: list[str], start: str, end: str) -> pd.DataFrame:
             group_by="ticker",
             threads=True,
             progress=False,
+            auto_adjust=False,
         )
     except Exception as e:
         logger.error("Failed to download batch: %s", e)
