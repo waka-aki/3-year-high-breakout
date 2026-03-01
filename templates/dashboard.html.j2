@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3-Year High Breakout Screener</title>
+<title>3年高値ブレイクアウトスクリーナー</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <style>
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f7f8fa; }
@@ -36,40 +36,40 @@
 <body class="p-4 md:p-8 max-w-7xl mx-auto">
 
 <div class="header">
-  <h1>3-Year High Breakout Screener</h1>
-  <p>Updated: {{ update_time }} | Tickers screened: {{ total_tickers }} | Breakouts today: {{ breakout_count }}</p>
+  <h1>3年高値ブレイクアウトスクリーナー</h1>
+  <p>更新: {{ update_time }} | スクリーニング銘柄数: {{ total_tickers }} | 本日のブレイクアウト: {{ breakout_count }}</p>
 </div>
 
 <!-- Summary Statistics -->
 <div class="card">
-  <div class="section-title">Summary</div>
+  <div class="section-title">サマリー</div>
   <div class="stat-grid">
     <div class="stat-box">
       <div class="stat-value">{{ breakout_count }}</div>
-      <div class="stat-label">Breakouts Today</div>
+      <div class="stat-label">本日のブレイクアウト</div>
     </div>
     <div class="stat-box">
       <div class="stat-value">{{ prime_count }}</div>
-      <div class="stat-label">Prime</div>
+      <div class="stat-label">プライム</div>
     </div>
     <div class="stat-box">
       <div class="stat-value">{{ standard_count }}</div>
-      <div class="stat-label">Standard</div>
+      <div class="stat-label">スタンダード</div>
     </div>
     <div class="stat-box">
       <div class="stat-value">{{ growth_count }}</div>
-      <div class="stat-label">Growth</div>
+      <div class="stat-label">グロース</div>
     </div>
     {% if avg_return_5d is not none %}
     <div class="stat-box">
       <div class="stat-value {% if avg_return_5d >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(avg_return_5d) }}%</div>
-      <div class="stat-label">Avg 5d Return</div>
+      <div class="stat-label">平均5日リターン</div>
     </div>
     {% endif %}
     {% if avg_return_30d is not none %}
     <div class="stat-box">
       <div class="stat-value {% if avg_return_30d >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(avg_return_30d) }}%</div>
-      <div class="stat-label">Avg 30d Return</div>
+      <div class="stat-label">平均30日リターン</div>
     </div>
     {% endif %}
   </div>
@@ -77,23 +77,24 @@
 
 <!-- Today's Breakouts -->
 <div class="card">
-  <div class="section-title">Today's Breakouts</div>
+  <div class="section-title">本日のブレイクアウト</div>
   {% if breakouts|length > 0 %}
   <div class="overflow-x">
     <table id="breakout-table">
       <thead>
         <tr>
-          <th class="sort-arrow" data-col="0" data-type="str">Ticker</th>
-          <th class="sort-arrow" data-col="1" data-type="str">Name</th>
-          <th class="sort-arrow" data-col="2" data-type="str">Market</th>
-          <th class="sort-arrow" data-col="3" data-type="num">Close</th>
-          <th class="sort-arrow" data-col="4" data-type="num">3Y High</th>
-          <th class="sort-arrow" data-col="5" data-type="num">Breakout %</th>
-          <th class="sort-arrow" data-col="6" data-type="num">出来高倍率</th>
-          <th class="sort-arrow" data-col="7" data-type="num">売買代金（億）</th>
-          <th class="sort-arrow" data-col="8" data-type="num">時価総額（億）</th>
-          <th class="sort-arrow" data-col="9" data-type="num">Rev Growth</th>
-          <th class="sort-arrow" data-col="10" data-type="num">Op Margin</th>
+          <th class="sort-arrow" data-col="0" data-type="str">銘柄コード</th>
+          <th class="sort-arrow" data-col="1" data-type="str">銘柄名</th>
+          <th class="sort-arrow" data-col="2" data-type="str">市場</th>
+          <th class="sort-arrow" data-col="3" data-type="num">終値</th>
+          <th class="sort-arrow" data-col="4" data-type="num">3年高値</th>
+          <th class="sort-arrow" data-col="5" data-type="num">出来高トレンド</th>
+          <th class="sort-arrow" data-col="6" data-type="num">売買代金（億）</th>
+          <th class="sort-arrow" data-col="7" data-type="num">時価総額（億）</th>
+          <th class="sort-arrow" data-col="8" data-type="num">PER</th>
+          <th class="sort-arrow" data-col="9" data-type="num">PBR</th>
+          <th class="sort-arrow" data-col="10" data-type="num">売上成長率</th>
+          <th class="sort-arrow" data-col="11" data-type="num">営業利益率</th>
         </tr>
       </thead>
       <tbody>
@@ -104,10 +105,11 @@
           <td>{{ b.market }}</td>
           <td>{{ "%.0f"|format(b.close) }}</td>
           <td>{{ "%.0f"|format(b.high_3y) }}</td>
-          <td class="positive">+{{ "%.2f"|format(b.breakout_pct) }}%</td>
           <td>{{ "%.1f"|format(b.volume_ratio) if b.volume_ratio == b.volume_ratio else '<span class="na">N/A</span>' }}x</td>
           <td>{{ "%.1f"|format(b.trading_value) }}</td>
           <td>{{ "%.0f"|format(b.market_cap) }}</td>
+          <td>{% if b.per == b.per %}{{ "%.1f"|format(b.per) }}{% else %}<span class="na">N/A</span>{% endif %}</td>
+          <td>{% if b.pbr == b.pbr %}{{ "%.2f"|format(b.pbr) }}{% else %}<span class="na">N/A</span>{% endif %}</td>
           <td>{% if b.revenue_growth_yoy == b.revenue_growth_yoy %}<span class="{% if b.revenue_growth_yoy >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(b.revenue_growth_yoy) }}%</span>{% else %}<span class="na">N/A</span>{% endif %}</td>
           <td>{% if b.operating_margin == b.operating_margin %}{{ "%.1f"|format(b.operating_margin) }}%{% else %}<span class="na">N/A</span>{% endif %}</td>
         </tr>
@@ -116,28 +118,28 @@
     </table>
   </div>
   {% else %}
-  <p style="color: #64748b;">No breakouts detected today.</p>
+  <p style="color: #64748b;">本日ブレイクアウトは検出されませんでした。</p>
   {% endif %}
 </div>
 
 <!-- Performance Tracking -->
 <div class="card">
-  <div class="section-title">Post-Breakout Performance (Last 30 Days)</div>
+  <div class="section-title">ブレイクアウト後パフォーマンス（直近30日）</div>
   {% if performance|length > 0 %}
   <div class="overflow-x">
     <table id="perf-table">
       <thead>
         <tr>
-          <th class="sort-arrow" data-col="0" data-type="str">Ticker</th>
-          <th class="sort-arrow" data-col="1" data-type="str">Name</th>
-          <th class="sort-arrow" data-col="2" data-type="str">Date</th>
-          <th class="sort-arrow" data-col="3" data-type="num">Breakout Price</th>
-          <th class="sort-arrow" data-col="4" data-type="num">Current</th>
-          <th class="sort-arrow" data-col="5" data-type="num">Return</th>
-          <th class="sort-arrow" data-col="6" data-type="num">5d</th>
-          <th class="sort-arrow" data-col="7" data-type="num">30d</th>
-          <th class="sort-arrow" data-col="8" data-type="num">60d</th>
-          <th class="sort-arrow" data-col="9" data-type="num">90d</th>
+          <th class="sort-arrow" data-col="0" data-type="str">銘柄コード</th>
+          <th class="sort-arrow" data-col="1" data-type="str">銘柄名</th>
+          <th class="sort-arrow" data-col="2" data-type="str">検出日</th>
+          <th class="sort-arrow" data-col="3" data-type="num">ブレイクアウト価格</th>
+          <th class="sort-arrow" data-col="4" data-type="num">現在値</th>
+          <th class="sort-arrow" data-col="5" data-type="num">リターン</th>
+          <th class="sort-arrow" data-col="6" data-type="num">5日</th>
+          <th class="sort-arrow" data-col="7" data-type="num">30日</th>
+          <th class="sort-arrow" data-col="8" data-type="num">60日</th>
+          <th class="sort-arrow" data-col="9" data-type="num">90日</th>
         </tr>
       </thead>
       <tbody>
@@ -163,7 +165,7 @@
     </table>
   </div>
   {% else %}
-  <p style="color: #64748b;">No performance data available yet.</p>
+  <p style="color: #64748b;">パフォーマンスデータはまだありません。</p>
   {% endif %}
 </div>
 

@@ -19,28 +19,50 @@ def fetch_financials(breakouts: pd.DataFrame) -> pd.DataFrame:
 
     rev_growths = []
     op_margins = []
+    pers = []
+    pbrs = []
 
     for _, row in breakouts.iterrows():
         ticker = row["ticker"]
         try:
-            info = yf.Ticker(ticker)
-            financials = info.financials
+            t = yf.Ticker(ticker)
+            financials = t.financials
+            info = t.info
 
             rev_growth = _calc_revenue_growth(financials)
             op_margin = _calc_operating_margin(financials)
+            per = _safe_float(info.get("trailingPE"))
+            pbr = _safe_float(info.get("priceToBook"))
         except Exception as e:
             logger.debug("Failed to fetch financials for %s: %s", ticker, e)
             rev_growth = np.nan
             op_margin = np.nan
+            per = np.nan
+            pbr = np.nan
 
         rev_growths.append(rev_growth)
         op_margins.append(op_margin)
+        pers.append(per)
+        pbrs.append(pbr)
 
     breakouts = breakouts.copy()
     breakouts["revenue_growth_yoy"] = rev_growths
     breakouts["operating_margin"] = op_margins
+    breakouts["per"] = pers
+    breakouts["pbr"] = pbrs
     logger.info("Fetched financials for %d stocks", len(breakouts))
     return breakouts
+
+
+def _safe_float(value) -> float:
+    """Convert value to float, returning NaN if invalid."""
+    if value is None:
+        return np.nan
+    try:
+        f = float(value)
+        return f if np.isfinite(f) else np.nan
+    except (ValueError, TypeError):
+        return np.nan
 
 
 def _calc_revenue_growth(financials: pd.DataFrame) -> float:

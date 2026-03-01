@@ -58,9 +58,8 @@ def filter_by_volume(breakouts: pd.DataFrame, prices: pd.DataFrame) -> pd.DataFr
             logger.debug("%s: volume trend declining, skipped", ticker)
             continue
 
-        # Calculate reference metrics
-        vol_20_avg = recent_20["volume"].mean()
-        volume_ratio = round(latest["volume"] / vol_20_avg, 2) if vol_20_avg > 0 else np.nan
+        # Calculate volume trend ratio (recent 20d avg / prior 20d avg)
+        volume_ratio = round(avg_vol_recent / avg_vol_prior, 2) if avg_vol_prior > 0 else np.nan
 
         entry = row.to_dict()
         entry["volume_ratio"] = volume_ratio
