@@ -26,9 +26,9 @@ def render_dashboard(
     # Prepare breakout data
     breakout_records = breakouts.to_dict("records") if not breakouts.empty else []
 
-    # Prepare performance data (last 30 days only)
+    # Prepare performance data (last 120 days)
     if not performance.empty:
-        cutoff = pd.Timestamp(datetime.now()) - pd.Timedelta(days=30)
+        cutoff = pd.Timestamp(datetime.now()) - pd.Timedelta(days=120)
         perf_recent = performance[
             pd.to_datetime(performance["breakout_date"]) >= cutoff
         ]
