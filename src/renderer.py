@@ -4,7 +4,6 @@ import logging
 import os
 from datetime import datetime
 
-import numpy as np
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 
@@ -43,17 +42,6 @@ def render_dashboard(
     else:
         market_counts = pd.Series(dtype=int)
 
-    # Average returns
-    avg_return_5d = None
-    avg_return_30d = None
-    if not performance.empty:
-        r5 = performance["return_5d"].dropna()
-        r30 = performance["return_30d"].dropna()
-        if len(r5) > 0:
-            avg_return_5d = float(r5.mean())
-        if len(r30) > 0:
-            avg_return_30d = float(r30.mean())
-
     context = {
         "update_time": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "total_tickers": total_tickers,
@@ -63,8 +51,6 @@ def render_dashboard(
         "prime_count": int(market_counts.get("Prime", 0)),
         "standard_count": int(market_counts.get("Standard", 0)),
         "growth_count": int(market_counts.get("Growth", 0)),
-        "avg_return_5d": avg_return_5d,
-        "avg_return_30d": avg_return_30d,
     }
 
     html = template.render(**context)

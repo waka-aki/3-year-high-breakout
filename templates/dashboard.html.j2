@@ -60,18 +60,6 @@
       <div class="stat-value">{{ growth_count }}</div>
       <div class="stat-label">グロース</div>
     </div>
-    {% if avg_return_5d is not none %}
-    <div class="stat-box">
-      <div class="stat-value {% if avg_return_5d >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(avg_return_5d) }}%</div>
-      <div class="stat-label">平均5日リターン</div>
-    </div>
-    {% endif %}
-    {% if avg_return_30d is not none %}
-    <div class="stat-box">
-      <div class="stat-value {% if avg_return_30d >= 0 %}positive{% else %}negative{% endif %}">{{ "%.1f"|format(avg_return_30d) }}%</div>
-      <div class="stat-label">平均30日リターン</div>
-    </div>
-    {% endif %}
   </div>
 </div>
 
