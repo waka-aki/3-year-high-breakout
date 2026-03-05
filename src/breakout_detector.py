@@ -11,7 +11,7 @@ LOOKBACK_DAYS = 756  # 252 trading days × 3 years
 
 # Require no breakout in the last QUIET_DAYS trading days.
 # This filters out stocks that have been continuously making new highs.
-QUIET_DAYS = 120
+QUIET_DAYS = 60
 
 
 def detect_breakouts(
