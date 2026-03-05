@@ -22,10 +22,13 @@ def detect_breakouts(
     """Find stocks breaking above multi-year highs for the first time in months.
 
     Filters:
-    1. Today's close > prior LOOKBACK_DAYS high (3-year high breakout).
-    2. Quiet period: in the past QUIET_DAYS trading days, no day had its close
-       exceed its own rolling long-term high. This ensures the stock has NOT
-       been making new highs recently.
+    1. Today's close > reference high (3-year high from before the quiet window).
+       The reference high uses the ``high`` column (intraday highs) but is
+       calculated from data older than QUIET_DAYS to exclude recent spikes.
+    2. Quiet period: every close in the most recent QUIET_DAYS trading days
+       must be at or below the reference high.  Using closes (not intraday
+       highs) for this check provides a natural buffer — a stock can touch the
+       level intraday as long as it consistently closes below it.
 
     The ``history`` parameter is accepted for interface compatibility but is
     no longer used for cooldown filtering (the quiet-period check replaces it).
@@ -56,43 +59,30 @@ def detect_breakouts(
         if len(prior) < QUIET_DAYS:
             continue
 
-        # 3-year high (use up to LOOKBACK_DAYS prior trading days)
-        lookback = prior.tail(LOOKBACK_DAYS)
-        high_3y = lookback["high"].max()
-        if pd.isna(high_3y) or high_3y <= 0:
+        # Reference high: 3-year high from data OLDER than the quiet window.
+        # This prevents recent intraday spikes from setting an unreachable bar.
+        older = prior.iloc[:-QUIET_DAYS]
+        if len(older) < 1:
+            continue
+        ref_high = older.tail(LOOKBACK_DAYS)["high"].max()
+        if pd.isna(ref_high) or ref_high <= 0:
             continue
 
-        # Condition 1: today's close exceeds the 3-year high
-        if today_close <= high_3y:
+        # Condition 1: today's close exceeds the reference high
+        if today_close <= ref_high:
             continue
 
         # Condition 2: quiet period check
-        # In the most recent QUIET_DAYS trading days (before today), check that
-        # no day's close exceeded its own rolling long-term high.
+        # Every close in the quiet window must be at or below ref_high.
         quiet_window = prior.tail(QUIET_DAYS)
-        was_quiet = True
-        for idx in range(len(quiet_window)):
-            row = quiet_window.iloc[idx]
-            day_close = row["close"]
-            # All days strictly before this day
-            days_before = group[group["date"] < row["date"]]
-            if len(days_before) < 20:
-                continue
-            rolling_high = days_before.tail(LOOKBACK_DAYS)["high"].max()
-            if pd.isna(rolling_high):
-                continue
-            if day_close > rolling_high:
-                was_quiet = False
-                break
-
-        if not was_quiet:
+        if (quiet_window["close"] > ref_high).any():
             continue
 
-        breakout_pct = (today_close - high_3y) / high_3y * 100
+        breakout_pct = (today_close - ref_high) / ref_high * 100
         results.append({
             "ticker": ticker,
             "close": today_close,
-            "high_3y": high_3y,
+            "high_3y": ref_high,
             "breakout_pct": round(breakout_pct, 2),
             "date": latest_date,
         })
