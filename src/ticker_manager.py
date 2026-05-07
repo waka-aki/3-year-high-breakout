@@ -47,9 +47,11 @@ def filter_ordinary_stocks(df: pd.DataFrame) -> pd.DataFrame:
 
 def build_ticker_csv(df: pd.DataFrame) -> pd.DataFrame:
     """Build clean ticker CSV with .T suffix for yfinance."""
-    code_col = [c for c in df.columns if "コード" in str(c)][0]
+    code_col = [c for c in df.columns if "コード" in str(c) and "業種" not in str(c) and "規模" not in str(c)][0]
     name_col = [c for c in df.columns if "銘柄名" in str(c)][0]
     market_col = [c for c in df.columns if "市場" in str(c)][0]
+    sector_col_candidates = [c for c in df.columns if "33業種区分" in str(c)]
+    sector_col = sector_col_candidates[0] if sector_col_candidates else None
 
     market_map = {
         "プライム（内国株式）": "Prime",
@@ -61,6 +63,7 @@ def build_ticker_csv(df: pd.DataFrame) -> pd.DataFrame:
         "ticker": df[code_col].astype(str) + ".T",
         "name": df[name_col],
         "market": df[market_col].map(market_map),
+        "sector": df[sector_col] if sector_col else "",
     })
 
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -77,9 +80,16 @@ def update_tickers() -> pd.DataFrame:
 
 
 def load_tickers() -> pd.DataFrame:
-    """Load tickers from cache, or download if not present."""
+    """Load tickers from cache, or download if not present.
+
+    If the cache exists but is missing the ``sector`` column (i.e. it was
+    written by an older version of this module), regenerate it.
+    """
     if os.path.exists(TICKERS_CSV):
         df = pd.read_csv(TICKERS_CSV)
+        if "sector" not in df.columns:
+            logger.info("Cached tickers missing 'sector' column, regenerating...")
+            return update_tickers()
         logger.info("Loaded %d tickers from cache", len(df))
         return df
     logger.info("No cached tickers found, downloading...")

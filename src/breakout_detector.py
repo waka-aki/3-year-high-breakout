@@ -94,7 +94,10 @@ def detect_breakouts(
     df = pd.DataFrame(results)
 
     # Merge with ticker info
-    name_map = tickers_df.set_index("ticker")[["name", "market"]]
+    info_cols = ["name", "market"]
+    if "sector" in tickers_df.columns:
+        info_cols.append("sector")
+    name_map = tickers_df.set_index("ticker")[info_cols]
     df = df.merge(name_map, left_on="ticker", right_index=True, how="left")
 
     logger.info("Detected %d breakouts", len(df))

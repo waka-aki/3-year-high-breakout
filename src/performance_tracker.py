@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
-import yfinance as yf
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +28,10 @@ def update_history(breakouts: pd.DataFrame) -> pd.DataFrame:
     if breakouts.empty:
         return history
 
-    new_entries = breakouts[["ticker", "name", "market", "close", "breakout_pct", "date"]].copy()
+    cols = ["ticker", "name", "market", "close", "breakout_pct", "date"]
+    if "sector" in breakouts.columns:
+        cols.insert(3, "sector")
+    new_entries = breakouts[cols].copy()
     new_entries = new_entries.rename(columns={"close": "breakout_price"})
 
     if not history.empty:
@@ -51,8 +53,17 @@ def update_history(breakouts: pd.DataFrame) -> pd.DataFrame:
     return history
 
 
-def track_performance(history: pd.DataFrame) -> pd.DataFrame:
-    """Calculate post-breakout returns for tracked stocks."""
+def track_performance(
+    history: pd.DataFrame,
+    prices: pd.DataFrame,
+    tickers_df: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    """Calculate post-breakout returns at fixed 5/30/60/90 trading-day offsets.
+
+    Looks up prices in the OHLCV cache rather than refetching from yfinance.
+    If tickers_df is provided, sector is backfilled from it for rows whose
+    history entry predates the sector column.
+    """
     if history.empty:
         return pd.DataFrame()
 
@@ -63,54 +74,78 @@ def track_performance(history: pd.DataFrame) -> pd.DataFrame:
     if recent.empty:
         return pd.DataFrame()
 
-    today = datetime.now().date()
+    prices = prices.copy()
+    prices["date"] = pd.to_datetime(prices["date"])
+    prices_by_ticker = {
+        ticker: df.sort_values("date").reset_index(drop=True)
+        for ticker, df in prices.groupby("ticker")
+    }
+
+    sector_lookup = {}
+    if tickers_df is not None and "sector" in tickers_df.columns:
+        sector_lookup = dict(zip(tickers_df["ticker"], tickers_df["sector"]))
+
     results = []
 
     for _, row in recent.iterrows():
-        breakout_date = pd.Timestamp(row["date"]).date()
+        breakout_date = pd.Timestamp(row["date"]).normalize()
         breakout_price = row["breakout_price"]
         ticker = row["ticker"]
+
+        sector = row.get("sector", "")
+        if (not sector or pd.isna(sector)) and ticker in sector_lookup:
+            sector = sector_lookup[ticker]
 
         perf = {
             "ticker": ticker,
             "name": row.get("name", ""),
             "market": row.get("market", ""),
-            "breakout_date": breakout_date,
+            "sector": sector if sector and not pd.isna(sector) else "",
+            "breakout_date": breakout_date.date(),
             "breakout_price": breakout_price,
         }
 
-        # Fetch current price for return calculation
-        days_since = (today - breakout_date).days
-        try:
-            current_data = yf.download(
-                ticker,
-                start=(datetime.now() - timedelta(days=5)).strftime("%Y-%m-%d"),
-                end=(datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"),
-                progress=False,
-            )
-            if not current_data.empty:
-                current_price = current_data["Close"].iloc[-1]
-                if isinstance(current_price, pd.Series):
-                    current_price = current_price.iloc[0]
-                perf["current_price"] = float(current_price)
-                perf["current_return"] = round(
-                    (float(current_price) - breakout_price) / breakout_price * 100, 2
-                )
-            else:
-                perf["current_price"] = np.nan
-                perf["current_return"] = np.nan
-        except Exception as e:
-            logger.debug("Failed to fetch current price for %s: %s", ticker, e)
+        ticker_prices = prices_by_ticker.get(ticker)
+        if ticker_prices is None or ticker_prices.empty:
+            logger.debug("%s: no price cache rows, skipping perf calc", ticker)
             perf["current_price"] = np.nan
             perf["current_return"] = np.nan
+            for d in TRACKING_DAYS:
+                perf[f"return_{d}d"] = np.nan
+            results.append(perf)
+            continue
 
-        # Mark which tracking periods have elapsed
+        # Locate the breakout row in the cache
+        breakout_rows = ticker_prices.index[ticker_prices["date"] == breakout_date]
+        if len(breakout_rows) == 0:
+            logger.debug("%s: breakout date %s not in cache", ticker, breakout_date.date())
+            perf["current_price"] = np.nan
+            perf["current_return"] = np.nan
+            for d in TRACKING_DAYS:
+                perf[f"return_{d}d"] = np.nan
+            results.append(perf)
+            continue
+
+        breakout_idx = int(breakout_rows[0])
+        last_idx = len(ticker_prices) - 1
+
+        # Current price = latest cached close for this ticker
+        current_price = float(ticker_prices.iloc[last_idx]["close"])
+        perf["current_price"] = current_price
+        perf["current_return"] = round(
+            (current_price - breakout_price) / breakout_price * 100, 2
+        )
+
+        # Returns at fixed trading-day offsets
         for d in TRACKING_DAYS:
-            col = f"return_{d}d"
-            if days_since >= d:
-                perf[col] = perf.get("current_return", np.nan)
+            target_idx = breakout_idx + d
+            if target_idx <= last_idx:
+                target_close = float(ticker_prices.iloc[target_idx]["close"])
+                perf[f"return_{d}d"] = round(
+                    (target_close - breakout_price) / breakout_price * 100, 2
+                )
             else:
-                perf[col] = np.nan
+                perf[f"return_{d}d"] = np.nan
 
         results.append(perf)
 

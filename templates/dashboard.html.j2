@@ -73,16 +73,17 @@
         <tr>
           <th class="sort-arrow" data-col="0" data-type="str">銘柄コード</th>
           <th class="sort-arrow" data-col="1" data-type="str">銘柄名</th>
-          <th class="sort-arrow" data-col="2" data-type="str">市場</th>
-          <th class="sort-arrow" data-col="3" data-type="num">終値</th>
-          <th class="sort-arrow" data-col="4" data-type="num">3年高値</th>
-          <th class="sort-arrow" data-col="5" data-type="num">出来高トレンド</th>
-          <th class="sort-arrow" data-col="6" data-type="num">売買代金（億）</th>
-          <th class="sort-arrow" data-col="7" data-type="num">時価総額（億）</th>
-          <th class="sort-arrow" data-col="8" data-type="num">PER</th>
-          <th class="sort-arrow" data-col="9" data-type="num">PBR</th>
-          <th class="sort-arrow" data-col="10" data-type="num">売上成長率</th>
-          <th class="sort-arrow" data-col="11" data-type="num">営業利益率</th>
+          <th class="sort-arrow" data-col="2" data-type="str">セクター</th>
+          <th class="sort-arrow" data-col="3" data-type="str">市場</th>
+          <th class="sort-arrow" data-col="4" data-type="num">終値</th>
+          <th class="sort-arrow" data-col="5" data-type="num">3年高値</th>
+          <th class="sort-arrow" data-col="6" data-type="num">出来高トレンド</th>
+          <th class="sort-arrow" data-col="7" data-type="num">売買代金（億）</th>
+          <th class="sort-arrow" data-col="8" data-type="num">時価総額（億）</th>
+          <th class="sort-arrow" data-col="9" data-type="num">PER</th>
+          <th class="sort-arrow" data-col="10" data-type="num">PBR</th>
+          <th class="sort-arrow" data-col="11" data-type="num">売上成長率</th>
+          <th class="sort-arrow" data-col="12" data-type="num">営業利益率</th>
         </tr>
       </thead>
       <tbody>
@@ -90,6 +91,7 @@
         <tr>
           <td>{{ b.ticker }}</td>
           <td>{{ b.name }}</td>
+          <td>{{ b.sector if b.sector else '<span class="na">N/A</span>' }}</td>
           <td>{{ b.market }}</td>
           <td>{{ "%.0f"|format(b.close) }}</td>
           <td>{{ "%.0f"|format(b.high_3y) }}</td>
@@ -120,14 +122,15 @@
         <tr>
           <th class="sort-arrow" data-col="0" data-type="str">銘柄コード</th>
           <th class="sort-arrow" data-col="1" data-type="str">銘柄名</th>
-          <th class="sort-arrow" data-col="2" data-type="str">検出日</th>
-          <th class="sort-arrow" data-col="3" data-type="num">ブレイクアウト価格</th>
-          <th class="sort-arrow" data-col="4" data-type="num">現在値</th>
-          <th class="sort-arrow" data-col="5" data-type="num">リターン</th>
-          <th class="sort-arrow" data-col="6" data-type="num">5日</th>
-          <th class="sort-arrow" data-col="7" data-type="num">30日</th>
-          <th class="sort-arrow" data-col="8" data-type="num">60日</th>
-          <th class="sort-arrow" data-col="9" data-type="num">90日</th>
+          <th class="sort-arrow" data-col="2" data-type="str">セクター</th>
+          <th class="sort-arrow" data-col="3" data-type="str">検出日</th>
+          <th class="sort-arrow" data-col="4" data-type="num">ブレイクアウト価格</th>
+          <th class="sort-arrow" data-col="5" data-type="num">現在値</th>
+          <th class="sort-arrow" data-col="6" data-type="num">リターン</th>
+          <th class="sort-arrow" data-col="7" data-type="num">5日</th>
+          <th class="sort-arrow" data-col="8" data-type="num">30日</th>
+          <th class="sort-arrow" data-col="9" data-type="num">60日</th>
+          <th class="sort-arrow" data-col="10" data-type="num">90日</th>
         </tr>
       </thead>
       <tbody>
@@ -135,6 +138,7 @@
         <tr>
           <td>{{ p.ticker }}</td>
           <td>{{ p.name }}</td>
+          <td>{{ p.sector if p.sector else '<span class="na">N/A</span>' }}</td>
           <td>{{ p.breakout_date }}</td>
           <td>{{ "%.0f"|format(p.breakout_price) }}</td>
           <td>{{ "%.0f"|format(p.current_price) if p.current_price == p.current_price else '<span class="na">N/A</span>' }}</td>

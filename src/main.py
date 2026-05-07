@@ -92,7 +92,7 @@ def main():
     # 6. Update performance tracking
     logger.info("Step 6: Updating performance tracking...")
     history = update_history(breakouts)
-    performance = track_performance(history)
+    performance = track_performance(history, prices, tickers_df)
 
     # 7. Render dashboard
     logger.info("Step 7: Rendering dashboard...")

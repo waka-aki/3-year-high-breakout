@@ -23,14 +23,26 @@ def render_dashboard(
     template = env.get_template("dashboard.html.j2")
 
     # Prepare breakout data
-    breakout_records = breakouts.to_dict("records") if not breakouts.empty else []
+    if not breakouts.empty:
+        b = breakouts.copy()
+        if "sector" in b.columns:
+            b["sector"] = b["sector"].fillna("").astype(str)
+        else:
+            b["sector"] = ""
+        breakout_records = b.to_dict("records")
+    else:
+        breakout_records = []
 
     # Prepare performance data (last 120 days)
     if not performance.empty:
         cutoff = pd.Timestamp(datetime.now()) - pd.Timedelta(days=120)
         perf_recent = performance[
             pd.to_datetime(performance["breakout_date"]) >= cutoff
-        ]
+        ].copy()
+        if "sector" in perf_recent.columns:
+            perf_recent["sector"] = perf_recent["sector"].fillna("").astype(str)
+        else:
+            perf_recent["sector"] = ""
         perf_records = perf_recent.to_dict("records")
     else:
         perf_records = []
