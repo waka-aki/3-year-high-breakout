@@ -101,7 +101,7 @@ def fetch_prices(tickers: list[str]) -> pd.DataFrame:
         for t in tickers:
             if t in last_dates.index:
                 last = last_dates[t]
-                if last.date() < today.date() - timedelta(days=1):
+                if last.date() < today.date():
                     tickers_to_fetch[t] = (last + timedelta(days=1)).strftime("%Y-%m-%d")
             else:
                 tickers_to_fetch[t] = cutoff.strftime("%Y-%m-%d")
