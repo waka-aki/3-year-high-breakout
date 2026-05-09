@@ -114,7 +114,7 @@
 
 <!-- Performance Tracking -->
 <div class="card">
-  <div class="section-title">ブレイクアウト後パフォーマンス（直近120日）</div>
+  <div class="section-title">ブレイクアウト後パフォーマンス（直近240日）</div>
   {% if performance|length > 0 %}
   <div class="overflow-x">
     <table id="perf-table">
@@ -123,14 +123,21 @@
           <th class="sort-arrow" data-col="0" data-type="str">銘柄コード</th>
           <th class="sort-arrow" data-col="1" data-type="str">銘柄名</th>
           <th class="sort-arrow" data-col="2" data-type="str">セクター</th>
-          <th class="sort-arrow" data-col="3" data-type="str">検出日</th>
-          <th class="sort-arrow" data-col="4" data-type="num">ブレイクアウト価格</th>
-          <th class="sort-arrow" data-col="5" data-type="num">現在値</th>
-          <th class="sort-arrow" data-col="6" data-type="num">リターン</th>
-          <th class="sort-arrow" data-col="7" data-type="num">5日</th>
-          <th class="sort-arrow" data-col="8" data-type="num">30日</th>
-          <th class="sort-arrow" data-col="9" data-type="num">60日</th>
-          <th class="sort-arrow" data-col="10" data-type="num">90日</th>
+          <th class="sort-arrow" data-col="3" data-type="str">市場</th>
+          <th class="sort-arrow" data-col="4" data-type="str">検出日</th>
+          <th class="sort-arrow" data-col="5" data-type="num">ブレイクアウト価格</th>
+          <th class="sort-arrow" data-col="6" data-type="num">現在値</th>
+          <th class="sort-arrow" data-col="7" data-type="num">リターン</th>
+          <th class="sort-arrow" data-col="8" data-type="num">検出時時価総額（億）</th>
+          <th class="sort-arrow" data-col="9" data-type="num">検出時PER</th>
+          <th class="sort-arrow" data-col="10" data-type="num">検出時PBR</th>
+          <th class="sort-arrow" data-col="11" data-type="num">5営業日</th>
+          <th class="sort-arrow" data-col="12" data-type="num">2週間</th>
+          <th class="sort-arrow" data-col="13" data-type="num">1か月</th>
+          <th class="sort-arrow" data-col="14" data-type="num">2か月</th>
+          <th class="sort-arrow" data-col="15" data-type="num">3か月</th>
+          <th class="sort-arrow" data-col="16" data-type="num">4か月</th>
+          <th class="sort-arrow" data-col="17" data-type="num">6か月</th>
         </tr>
       </thead>
       <tbody>
@@ -139,13 +146,17 @@
           <td>{{ p.ticker }}</td>
           <td>{{ p.name }}</td>
           <td>{{ p.sector if p.sector else '<span class="na">N/A</span>' }}</td>
+          <td>{{ p.market if p.market else '<span class="na">N/A</span>' }}</td>
           <td>{{ p.breakout_date }}</td>
           <td>{{ "%.0f"|format(p.breakout_price) }}</td>
           <td>{{ "%.0f"|format(p.current_price) if p.current_price == p.current_price else '<span class="na">N/A</span>' }}</td>
           <td class="{% if p.current_return is defined and p.current_return == p.current_return %}{% if p.current_return >= 0 %}positive{% else %}negative{% endif %}{% endif %}">
             {% if p.current_return is defined and p.current_return == p.current_return %}{{ "%+.2f"|format(p.current_return) }}%{% else %}<span class="na">N/A</span>{% endif %}
           </td>
-          {% for d in [5, 30, 60, 90] %}
+          <td>{% if p.market_cap is defined and p.market_cap == p.market_cap %}{{ "%.0f"|format(p.market_cap) }}{% else %}<span class="na">N/A</span>{% endif %}</td>
+          <td>{% if p.per is defined and p.per == p.per %}{{ "%.1f"|format(p.per) }}{% else %}<span class="na">N/A</span>{% endif %}</td>
+          <td>{% if p.pbr is defined and p.pbr == p.pbr %}{{ "%.2f"|format(p.pbr) }}{% else %}<span class="na">N/A</span>{% endif %}</td>
+          {% for d in [5, 10, 21, 42, 63, 84, 126] %}
           {% set ret = p['return_' ~ d ~ 'd'] %}
           <td class="{% if ret == ret %}{% if ret >= 0 %}positive{% else %}negative{% endif %}{% endif %}">
             {% if ret == ret %}{{ "%+.2f"|format(ret) }}%{% else %}<span class="na">-</span>{% endif %}

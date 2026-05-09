@@ -13,7 +13,8 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 HISTORY_CSV = os.path.join(DATA_DIR, "breakout_history.csv")
 PERF_CSV = os.path.join(DATA_DIR, "performance_tracking.csv")
 
-TRACKING_DAYS = [5, 30, 60, 90]
+TRACKING_DAYS = [5, 10, 21, 42, 63, 84, 126]
+CUTOFF_DAYS = 240
 
 
 def update_history(breakouts: pd.DataFrame) -> pd.DataFrame:
@@ -31,6 +32,9 @@ def update_history(breakouts: pd.DataFrame) -> pd.DataFrame:
     cols = ["ticker", "name", "market", "close", "breakout_pct", "date"]
     if "sector" in breakouts.columns:
         cols.insert(3, "sector")
+    for col in ["market_cap", "per", "pbr"]:
+        if col in breakouts.columns:
+            cols.append(col)
     new_entries = breakouts[cols].copy()
     new_entries = new_entries.rename(columns={"close": "breakout_price"})
 
@@ -58,7 +62,10 @@ def track_performance(
     prices: pd.DataFrame,
     tickers_df: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
-    """Calculate post-breakout returns at fixed 5/30/60/90 trading-day offsets.
+    """Calculate post-breakout returns at fixed trading-day offsets.
+
+    Tracking offsets (trading days): 5, 10, 21, 42, 63, 84, 126
+    These map to calendar labels: 5営業日, 2週間, 1か月, 2か月, 3か月, 4か月, 6か月.
 
     Looks up prices in the OHLCV cache rather than refetching from yfinance.
     If tickers_df is provided, sector is backfilled from it for rows whose
@@ -67,8 +74,8 @@ def track_performance(
     if history.empty:
         return pd.DataFrame()
 
-    # Only track breakouts from last 120 days
-    cutoff = pd.Timestamp(datetime.now() - timedelta(days=120))
+    # Only track breakouts from last CUTOFF_DAYS calendar days
+    cutoff = pd.Timestamp(datetime.now() - timedelta(days=CUTOFF_DAYS))
     recent = history[history["date"] >= cutoff].copy()
 
     if recent.empty:
@@ -103,6 +110,9 @@ def track_performance(
             "sector": sector if sector and not pd.isna(sector) else "",
             "breakout_date": breakout_date.date(),
             "breakout_price": breakout_price,
+            "market_cap": row.get("market_cap", np.nan),
+            "per": row.get("per", np.nan),
+            "pbr": row.get("pbr", np.nan),
         }
 
         ticker_prices = prices_by_ticker.get(ticker)
