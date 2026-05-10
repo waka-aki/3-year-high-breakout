@@ -15,7 +15,6 @@ from ticker_manager import load_tickers, update_tickers
 from data_fetcher import fetch_prices
 from breakout_detector import detect_breakouts
 from volume_filter import filter_by_volume
-from financials import fetch_financials
 from performance_tracker import update_history, track_performance
 from renderer import render_dashboard
 
@@ -82,20 +81,13 @@ def main():
     else:
         logger.info("Step 4: No breakouts to filter")
 
-    # 5. Fetch financials for filtered breakout stocks
-    if not breakouts.empty:
-        logger.info("Step 5: Fetching financials for %d breakout stocks...", len(breakouts))
-        breakouts = fetch_financials(breakouts)
-    else:
-        logger.info("Step 5: No breakouts to fetch financials for")
-
-    # 6. Update performance tracking
-    logger.info("Step 6: Updating performance tracking...")
+    # 5. Update performance tracking
+    logger.info("Step 5: Updating performance tracking...")
     history = update_history(breakouts)
     performance = track_performance(history, prices, tickers_df)
 
-    # 7. Render dashboard
-    logger.info("Step 7: Rendering dashboard...")
+    # 6. Render dashboard
+    logger.info("Step 6: Rendering dashboard...")
     output_path = render_dashboard(breakouts, performance, len(ticker_list))
 
     logger.info("=== Done! Dashboard: %s ===", output_path)

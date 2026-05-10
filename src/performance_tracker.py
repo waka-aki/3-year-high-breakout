@@ -32,9 +32,6 @@ def update_history(breakouts: pd.DataFrame) -> pd.DataFrame:
     cols = ["ticker", "name", "market", "close", "breakout_pct", "date"]
     if "sector" in breakouts.columns:
         cols.insert(3, "sector")
-    for col in ["market_cap", "per", "pbr"]:
-        if col in breakouts.columns:
-            cols.append(col)
     new_entries = breakouts[cols].copy()
     new_entries = new_entries.rename(columns={"close": "breakout_price"})
 
@@ -110,9 +107,6 @@ def track_performance(
             "sector": sector if sector and not pd.isna(sector) else "",
             "breakout_date": breakout_date.date(),
             "breakout_price": breakout_price,
-            "market_cap": row.get("market_cap", np.nan),
-            "per": row.get("per", np.nan),
-            "pbr": row.get("pbr", np.nan),
         }
 
         ticker_prices = prices_by_ticker.get(ticker)
