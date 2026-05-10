@@ -39,7 +39,18 @@ jobs:
 
       - name: Run breakout scanner
         run: |
-          if [ ! -f data/tickers.csv ]; then
+          # tickers.csv 再取得タイミング:
+          # (1) ファイル不在(初回) または
+          # (2) 月初の最初の平日 (JPXが月次で更新するファイルに合わせて月1回)
+          DAY=$(TZ=Asia/Tokyo date +%d)
+          FIRST_DOW=$(TZ=Asia/Tokyo date -d "$(TZ=Asia/Tokyo date +%Y-%m-01)" +%u)
+          case "$FIRST_DOW" in
+            6) FIRST_WEEKDAY="03" ;;  # 1日が土 → 最初の平日は3日(月)
+            7) FIRST_WEEKDAY="02" ;;  # 1日が日 → 最初の平日は2日(月)
+            *) FIRST_WEEKDAY="01" ;;  # 1日が平日 → 1日が最初の平日
+          esac
+          if [ ! -f data/tickers.csv ] || [ "$DAY" = "$FIRST_WEEKDAY" ]; then
+            echo "Refreshing tickers.csv from JPX (today=$DAY, first weekday=$FIRST_WEEKDAY)"
             python src/main.py --update-tickers
           else
             python src/main.py
