@@ -72,7 +72,7 @@ python src/main.py                     # 2回目以降: キャッシュされた
 
 ## ダッシュボードの閲覧方法
 
-GitHub Actions により毎日 JST 18:00 にスキャンが自動実行され、結果がリポジトリにコミットされます。
+GitHub Actions により毎営業日 JST 18:17 頃にスキャンが自動実行され、結果がリポジトリにコミットされます。
 
 ダッシュボードを閲覧するには、リポジトリをローカルに取得してブラウザで開いてください。
 
@@ -95,6 +95,8 @@ git pull
 
 ## 自動実行 (GitHub Actions)
 
-- **スケジュール**: 毎日 JST 18:00 (UTC 09:00)
-- **手動実行**: GitHub リポジトリの Actions タブから `workflow_dispatch` で手動実行も可能
-- **対象ファイル**: `data/*.csv`, `output/dashboard.html`, `logs/` が自動コミットされる
+- **スケジュール**: 毎営業日（月〜金）JST 18:17 を主スロットとし、予備として JST 21:17・23:47 にも起動
+  - GitHub Actions の `schedule` はベストエフォートで遅延・スキップが起こりうるため、毎時0分を避けた時刻に複数スロットを設定
+  - 「今日分が既にコミット済みなら以降をスキップ」するガードを入れているため、予備スロットでの二重実行は発生しない
+- **手動実行**: GitHub リポジトリの Actions タブから `workflow_dispatch` で手動実行も可能（ガードを無視して常に実行）
+- **対象ファイル**: `data/tickers.csv`, `data/breakout_history.csv`, `data/performance_tracking.csv`, `output/dashboard.html`, `logs/` が自動コミットされる（`price_cache.csv` は Actions のキャッシュにのみ保存され、リポジトリにはコミットされない）

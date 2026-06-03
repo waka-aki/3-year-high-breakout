@@ -2,9 +2,13 @@ name: Daily 3-Year High Breakout Scan
 
 on:
   schedule:
-    # 毎日 JST 18:00 (UTC 09:00) に実行
-    # 東証取引終了(15:30)後、データ反映の余裕を持たせている
-    - cron: "0 9 * * 1-5"
+    # GitHub の schedule はベストエフォートで、特に毎時0分は混雑により
+    # 遅延・スキップされやすい。そのため (1) 0分を避ける (2) 引け後の夜間に
+    # 予備スロットを複数用意する、の2点で対策。下流の "今日実行済みなら skip"
+    # ガードにより、主スロットが成功すれば予備は何もせず終了する(二重実行なし)。
+    - cron: "17 9 * * 1-5"   # 主   : JST 18:17 (UTC 09:17)
+    - cron: "17 12 * * 1-5"  # 予備1: JST 21:17 (UTC 12:17)
+    - cron: "47 14 * * 1-5"  # 予備2: JST 23:47 (UTC 14:47)
   workflow_dispatch:
 
 permissions:
@@ -21,15 +25,34 @@ jobs:
         with:
           fetch-depth: 0
 
+      # 予備スロットで重複実行しないためのガード。
+      # 今日(JST)の "Daily scan: <日付>" コミットが既にあれば以降を skip する。
+      # 手動実行(workflow_dispatch)は常に実行する。
+      - name: Check if today's scan already ran
+        id: guard
+        run: |
+          TODAY=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          elif git log -30 --format=%s | grep -q "Daily scan: ${TODAY}"; then
+            echo "Already scanned today (${TODAY}); skipping remaining steps."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Python 3.11
+        if: steps.guard.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
+        if: steps.guard.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
       - name: Restore price cache
+        if: steps.guard.outputs.skip != 'true'
         uses: actions/cache/restore@v4
         with:
           path: data/price_cache.csv
@@ -38,6 +61,7 @@ jobs:
             price-cache-
 
       - name: Run breakout scanner
+        if: steps.guard.outputs.skip != 'true'
         run: |
           # tickers.csv 再取得タイミング:
           # (1) ファイル不在(初回) または
@@ -58,12 +82,14 @@ jobs:
         continue-on-error: true
 
       - name: Save price cache
+        if: steps.guard.outputs.skip != 'true'
         uses: actions/cache/save@v4
         with:
           path: data/price_cache.csv
           key: price-cache-${{ github.run_id }}
 
       - name: Commit and push results
+        if: steps.guard.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
