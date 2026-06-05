@@ -95,8 +95,8 @@ git pull
 
 ## 自動実行 (GitHub Actions)
 
-- **スケジュール**: 毎営業日（月〜金）JST 18:17 を主スロットとし、予備として JST 21:17・23:47 にも起動
-  - GitHub Actions の `schedule` はベストエフォートで遅延・スキップが起こりうるため、毎時0分を避けた時刻に複数スロットを設定
-  - 「今日分が既にコミット済みなら以降をスキップ」するガードを入れているため、予備スロットでの二重実行は発生しない
-- **手動実行**: GitHub リポジトリの Actions タブから `workflow_dispatch` で手動実行も可能（ガードを無視して常に実行）
+- **スケジュール**: 毎営業日（月〜金）JST 18:17（UTC 09:17）に1日1回だけ実行
+  - GitHub Actions の `schedule` はベストエフォートで遅延・スキップが起こりうるが、引け（15:00）後かつ JST 0時まで余裕のある時間帯のため、多少遅延しても当日の終値で当日中に実行される
+  - 毎時0分は混雑しやすいため17分に設定
+- **手動実行**: GitHub リポジトリの Actions タブから `workflow_dispatch` で手動実行も可能
 - **対象ファイル**: `data/tickers.csv`, `data/breakout_history.csv`, `data/performance_tracking.csv`, `output/dashboard.html`, `logs/` が自動コミットされる（`price_cache.csv` は Actions のキャッシュにのみ保存され、リポジトリにはコミットされない）
