@@ -143,4 +143,12 @@ git pull
   - GitHub Actions の `schedule` はベストエフォートで遅延・スキップが起こりうるが、引け（15:00）後かつ JST 0時まで余裕のある時間帯のため、多少遅延しても当日の終値で当日中に実行される
   - 毎時0分は混雑しやすいため17分に設定
 - **手動実行**: GitHub リポジトリの Actions タブから `workflow_dispatch` で手動実行も可能
-- **対象ファイル**: `data/tickers.csv`, `data/breakout_history.csv`, `data/performance_tracking.csv`, `output/dashboard.html`, `logs/` が自動コミットされる（`price_cache.csv` は Actions のキャッシュにのみ保存され、リポジトリにはコミットされない）
+- **対象ファイル**: `data/tickers.csv`, `data/breakout_history.csv`, `data/performance_tracking.csv`, `output/dashboard.html` が自動コミットされる（`price_cache.csv` は Actions のキャッシュにのみ保存され、リポジトリにはコミットされない）
+
+## 免責事項
+
+本ツールおよびダッシュボードは、プログラミング学習およびデータ分析を目的とした個人開発プロジェクトです。
+
+- 提供する情報は**特定銘柄の売買を推奨・助言するものではありません**。投資判断はご自身の責任で行ってください。
+- 株価データは [yfinance](https://github.com/ranaroussi/yfinance) 等の外部ソースに依存しており、正確性・完全性・即時性を保証しません。
+- 本ツールの利用によって生じたいかなる損害についても、作者は責任を負いません。
