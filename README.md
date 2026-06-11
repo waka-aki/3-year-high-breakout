@@ -1,7 +1,47 @@
 # 3年高値ブレイクアウトスクリーナー
 
-東証プライム・スタンダード・グロース市場の日本株を対象とした3年高値ブレイクアウトスクリーナー。
+[![Daily Scan](https://github.com/waka-aki/3-year-high-breakout/actions/workflows/daily-scan.yml/badge.svg)](https://github.com/waka-aki/3-year-high-breakout/actions/workflows/daily-scan.yml)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+[![Live Dashboard](https://img.shields.io/badge/🔗_Live_Dashboard-GitHub_Pages-2ea44f)](https://waka-aki.github.io/3-year-high-breakout/)
+
+東証プライム・スタンダード・グロース市場の日本株（約3,700銘柄）を対象とした3年高値ブレイクアウトスクリーナー。
 過去3年の高値を、60日間の静寂期間を経て初めて超えた銘柄を検出し、出来高・流動性ベースのフィルタリングで質の高い銘柄のみを抽出し、ブレイクアウト後のパフォーマンスを追跡し、HTMLダッシュボードを出力する。
+GitHub Actions で毎営業日全自動実行され、結果は GitHub Pages で公開している。
+
+> 🔗 **ライブダッシュボード**: <https://waka-aki.github.io/3-year-high-breakout/> （毎営業日 18:17 JST に自動更新）
+
+## 技術スタック
+
+| 領域 | 使用技術 |
+|------|----------|
+| 言語 | Python 3.12 |
+| データ取得 | [yfinance](https://github.com/ranaroussi/yfinance)（株価 OHLCV・時価総額）、[JPX](https://www.jpx.co.jp/) 上場銘柄一覧（XLS） |
+| データ処理 | pandas、xlrd / openpyxl |
+| レンダリング | Jinja2 テンプレート + Tailwind CSS（CDN）、クライアントサイド JS によるテーブルソート |
+| 自動実行 | GitHub Actions（cron スケジュール） |
+| ホスティング | GitHub Pages |
+
+## アーキテクチャ
+
+`main.py` をオーケストレーターとして、6つのモジュールが順にデータを受け渡すパイプライン構成。各モジュールは単一責務で、出力は `data/` に CSV キャッシュされ増分更新される。
+
+```mermaid
+flowchart LR
+    A["① ticker_manager<br/>JPX銘柄リスト取得"] --> B["② data_fetcher<br/>株価OHLCV取得"]
+    B --> C["③ breakout_detector<br/>3年高値ブレイク検出"]
+    C --> D["④ volume_filter<br/>流動性フィルタ"]
+    D --> E["⑤ performance_tracker<br/>ブレイク後リターン追跡"]
+    E --> F["⑥ renderer<br/>HTMLダッシュボード生成"]
+```
+
+| # | モジュール | 役割 |
+|---|-----------|------|
+| ① | `ticker_manager` | JPX の XLS から銘柄コード・銘柄名・市場区分・33業種セクターを取得し、yfinance 形式（コード+`.T`）に変換してキャッシュ |
+| ② | `data_fetcher` | yfinance 経由で 37ヶ月（約3年）ローリングウィンドウの OHLCV を増分取得（50銘柄/バッチ、2秒間隔） |
+| ③ | `breakout_detector` | 終値が基準高値（直近60営業日を除く過去756営業日＝約3年の高値）を超え、かつ直近60営業日の全終値が基準高値以下だった銘柄を検出 |
+| ④ | `volume_filter` | 売買代金（≧1億円）・時価総額（≧100億円）・出来高トレンドでフィルタリング |
+| ⑤ | `performance_tracker` | ブレイク後 5 / 10 / 21 / 42 / 63 / 84 / 126 営業日のリターンを追跡（240日以内） |
+| ⑥ | `renderer` | Jinja2 テンプレートから HTML ダッシュボードを生成 |
 
 ## セットアップ
 
@@ -72,9 +112,13 @@ python src/main.py                     # 2回目以降: キャッシュされた
 
 ## ダッシュボードの閲覧方法
 
-GitHub Actions により毎営業日 JST 18:17 頃にスキャンが自動実行され、結果がリポジトリにコミットされます。
+GitHub Actions により毎営業日 JST 18:17 頃にスキャンが自動実行され、結果がリポジトリにコミット・GitHub Pages へ反映されます。
 
-ダッシュボードを閲覧するには、リポジトリをローカルに取得してブラウザで開いてください。
+最新のダッシュボードは以下からブラウザで直接閲覧できます（インストール不要）。
+
+🔗 **<https://waka-aki.github.io/3-year-high-breakout/>**
+
+ローカルで閲覧したい場合は、リポジトリを取得してブラウザで開いてください。
 
 ```bash
 # 初回
