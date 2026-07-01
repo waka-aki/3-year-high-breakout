@@ -79,7 +79,6 @@ ticker,name,market,sector
 1766.T,東建コーポレーション,Prime,建設業
 1768.T,ソネック,Standard,建設業
 1770.T,藤田エンジニアリング,Standard,建設業
-1776.T,三井住建道路,Standard,建設業
 177A.T,コージンバイオ,Growth,化学
 1780.T,ヤマウラ,Prime,建設業
 1783.T,ｆａｎｔａｓｉｓｔａ,Standard,不動産業
@@ -301,7 +300,6 @@ ticker,name,market,sector
 2340.T,極楽湯ホールディングス,Standard,サービス業
 2341.T,アルバイトタイムス,Standard,サービス業
 2342.T,トランスジェニックグループ,Standard,サービス業
-2344.T,平安レイサービス,Standard,サービス業
 2345.T,ＨＯＤＬ１,Standard,情報・通信業
 2349.T,エヌアイデイ,Standard,情報・通信業
 2351.T,ＡＳＪ,Standard,情報・通信業
@@ -422,7 +420,6 @@ ticker,name,market,sector
 2687.T,シー・ヴイ・エス・ベイエリア,Standard,サービス業
 2689.T,オルバヘルスケアホールディングス,Standard,卸売業
 268A.T,リガク・ホールディングス,Prime,精密機器
-2692.T,伊藤忠食品,Prime,卸売業
 2693.T,ＹＫＴ,Standard,卸売業
 2694.T,焼肉坂井ホールディングス,Standard,小売業
 2695.T,くら寿司,Prime,小売業
@@ -670,7 +667,7 @@ ticker,name,market,sector
 3191.T,ジョイフル本田,Prime,小売業
 3192.T,白鳩,Standard,小売業
 3193.T,エターナルホスピタリティグループ,Prime,小売業
-3195.T,ジェネレーションパス,Growth,小売業
+3195.T,ジェネレーションパス,Standard,小売業
 3196.T,ホットランドホールディングス,Prime,小売業
 3197.T,すかいらーくホールディングス,Prime,小売業
 3198.T,ＳＦＰホールディングス,Prime,小売業
@@ -851,7 +848,6 @@ ticker,name,market,sector
 3580.T,小松マテーレ,Prime,繊維製品
 3583.T,オーベクス,Standard,繊維製品
 3591.T,ワコールホールディングス,Prime,繊維製品
-3593.T,ホギメディカル,Prime,繊維製品
 3597.T,自重堂,Standard,繊維製品
 3598.T,山喜,Standard,繊維製品
 3600.T,フジックス,Standard,繊維製品
@@ -1290,7 +1286,6 @@ ticker,name,market,sector
 4380.T,Ｍマート,Growth,情報・通信業
 4381.T,ビープラッツ,Growth,情報・通信業
 4382.T,ＨＥＲＯＺ,Standard,情報・通信業
-4384.T,ラクスル,Prime,情報・通信業
 4385.T,メルカリ,Prime,情報・通信業
 4386.T,ＳＩＧグループ,Standard,情報・通信業
 4387.T,ＺＵＵ,Growth,情報・通信業
@@ -1393,7 +1388,6 @@ ticker,name,market,sector
 4526.T,理研ビタミン,Prime,食料品
 4527.T,ロート製薬,Prime,医薬品
 4528.T,小野薬品工業,Prime,医薬品
-4530.T,久光製薬,Prime,医薬品
 4531.T,有機合成薬品工業,Standard,化学
 4534.T,持田製薬,Prime,医薬品
 4536.T,参天製薬,Prime,医薬品
@@ -1590,7 +1584,6 @@ ticker,name,market,sector
 4911.T,資生堂,Prime,化学
 4912.T,ライオン,Prime,化学
 4914.T,高砂香料工業,Prime,化学
-4917.T,マンダム,Prime,化学
 4918.T,アイビー化粧品,Standard,化学
 4919.T,ミルボン,Prime,化学
 4920.T,日本色材工業研究所,Standard,化学
@@ -1851,7 +1844,6 @@ ticker,name,market,sector
 5721.T,エスクリプトエナジー,Standard,非鉄金属
 5724.T,アサカ理研,Standard,非鉄金属
 5726.T,大阪チタニウムテクノロジーズ,Prime,非鉄金属
-5727.T,東邦チタニウム,Prime,非鉄金属
 5729.T,日本精鉱,Standard,非鉄金属
 5741.T,ＵＡＣＪ,Prime,非鉄金属
 5742.T,エヌアイシ・オートテック,Standard,非鉄金属
@@ -1976,7 +1968,7 @@ ticker,name,market,sector
 6044.T,三機サービス,Standard,サービス業
 6045.T,レントラックス,Growth,サービス業
 6046.T,リンクバル,Standard,サービス業
-6047.T,Ｇｕｎｏｓｙ,Prime,サービス業
+6047.T,Ｇｕｎｏｓｙ,Standard,サービス業
 6049.T,イトクロ,Growth,サービス業
 6050.T,イー・ガーディアン,Prime,サービス業
 6054.T,リブセンス,Standard,サービス業
@@ -2229,7 +2221,6 @@ ticker,name,market,sector
 6485.T,前澤給装工業,Standard,機械
 6486.T,イーグル工業,Prime,機械
 6488.T,ヨシタケ,Standard,機械
-6489.T,前澤工業,Standard,機械
 6490.T,ＰＩＬＬＡＲ,Prime,機械
 6492.T,岡野バルブ製造,Standard,機械
 6493.T,ＮＩＴＴＡＮ,Standard,輸送用機器
@@ -2280,7 +2271,6 @@ ticker,name,market,sector
 6562.T,ジーニー,Growth,サービス業
 6563.T,みらいワークス,Growth,サービス業
 6564.T,ミダックホールディングス,Prime,サービス業
-6565.T,ＡＢホテル,Standard,サービス業
 6566.T,要興業,Standard,サービス業
 6568.T,神戸天然物化学,Growth,サービス業
 6570.T,共和コーポレーション,Standard,サービス業
@@ -2445,7 +2435,6 @@ ticker,name,market,sector
 6897.T,ツインバード,Standard,電気機器
 6898.T,トミタ電機,Standard,電気機器
 6899.T,ＡＳＴＩ,Standard,電気機器
-6901.T,澤藤電機,Standard,電気機器
 6902.T,デンソー,Prime,輸送用機器
 6904.T,原田工業,Standard,電気機器
 6905.T,コーセル,Prime,電気機器
@@ -2553,7 +2542,6 @@ ticker,name,market,sector
 7084.T,Ｓｍｉｌｅ　Ｈｏｌｄｉｎｇｓ,Growth,サービス業
 7085.T,カーブスホールディングス,Prime,サービス業
 7087.T,ウイルテック,Standard,サービス業
-7088.T,フォーラムエンジニアリング,Prime,サービス業
 7089.T,フォースタートアップス,Growth,サービス業
 7090.T,リグア,Growth,サービス業
 7091.T,リビングプラットフォーム,Growth,サービス業
@@ -2977,7 +2965,6 @@ ticker,name,market,sector
 7919.T,野崎印刷紙業,Standard,その他製品
 7921.T,ＴＡＫＡＲＡ　＆　ＣＯＭＰＡＮＹ,Prime,その他製品
 7922.T,三光産業,Standard,その他製品
-7925.T,前澤化成工業,Prime,化学
 7927.T,ムトー精工,Standard,化学
 7928.T,旭化学工業,Standard,化学
 7931.T,未来工業,Prime,化学
@@ -3353,7 +3340,7 @@ ticker,name,market,sector
 9042.T,阪急阪神ホールディングス,Prime,陸運業
 9044.T,ＮＡＮＫＡＩ,Prime,陸運業
 9045.T,京阪ホールディングス,Prime,陸運業
-9046.T,神戸電鉄,Prime,陸運業
+9046.T,神戸電鉄,Standard,陸運業
 9048.T,名古屋鉄道,Prime,陸運業
 9049.T,京福電気鉄道,Standard,陸運業
 9051.T,センコン物流,Standard,陸運業
